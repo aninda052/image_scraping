@@ -6,7 +6,7 @@ from urllib.parse import urlparse
 from django.core.files.base import ContentFile
 from django.db import IntegrityError
 
-from scrapping.models import ScrappedImage
+from scraping.models import ScrappedImage
 
 
 class LandingPageView(View):
