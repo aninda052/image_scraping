@@ -20,7 +20,8 @@ from django.conf.urls.static import static
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('',  include('scrapping.urls')),
+    path('', include('scraping.urls')),
+    path('api/', include('scraping.api.urls', namespace="scraping_api")),
 
 
 ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
