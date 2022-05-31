@@ -34,7 +34,7 @@ class ScrapedImage(models.Model, ResizeImageMixin):
     scraped_url = models.URLField(null=False)
     domain = models.CharField(max_length=25)
     download_date = models.DateField(auto_now_add=True)
-    image_dimension = models.CharField(max_length=10)
+    original_image_dimension = models.CharField(max_length=10)
 
     def __str__(self):
         return self.image_source
@@ -50,7 +50,7 @@ class ScrapedImage(models.Model, ResizeImageMixin):
             if self.image_original.width > LARGE_IMAGE_WIDTH:
                 self.image_large = self.resize(self.image_original, (LARGE_IMAGE_WIDTH, LARGE_IMAGE_WIDTH), "large")
 
-            self.image_dimension = f'{self.image_original.width}*{self.image_original.height}'
+            self.original_image_dimension = f'{self.image_original.width}*{self.image_original.height}'
 
         super(ScrapedImage, self).save(*args, **kwargs)
 
