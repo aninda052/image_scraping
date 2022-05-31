@@ -25,9 +25,6 @@ class ImageListAPI(generics.ListAPIView):
         if scraped_url:
             filter["scraped_url"] = scraped_url
 
-        # if image_size == "small":
-        #
-        #     filter["image_small"] = scraped_url
 
         queryset = self.queryset.filter(**filter)
 
@@ -52,5 +49,5 @@ class ImageListAPI(generics.ListAPIView):
             serializer = self.get_serializer(page, many=True, context={'image_size': request.query_params.get("image_size", "")})
             return self.get_paginated_response(serializer.data)
 
-        serializer = self.get_serializer(self.get_queryset(), many=True)
+        serializer = self.get_serializer(self.get_queryset(),many=True, context={'image_size': request.query_params.get("image_size", "")})
         return Response(serializer.data)

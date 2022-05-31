@@ -3,11 +3,9 @@ from django.views import View
 import requests
 from bs4 import BeautifulSoup
 from urllib.parse import urlparse
-from django.core.files.base import ContentFile
-from django.db import IntegrityError
 
-from scraping.models import ScrapedImage
-
+from .models import ScrapedImage
+from .tasks import fetch_image_and_save
 
 class LandingPageView(View):
 
@@ -35,30 +33,9 @@ class LandingPageView(View):
 
                 if not image_source or 'svg' in image_source.split('.')[-1]:
                     continue
-
-                if domain not in image_source:
-                    image_source = f'{scheme}://{domain}{image_source}'
-
-                file_name = image_source.split('/')[-1]
-
                 if not ScrapedImage.objects.filter(image_source=image_source).exists():
-
-
-                    response = requests.get(image_source)
-                    if response.status_code == 200:
-                        scrapped_image_obj = ScrapedImage()
-                        scrapped_image_obj.image_source = image_source
-                        scrapped_image_obj.scraped_url = scrapping_url
-                        scrapped_image_obj.domain = domain
-
-                        scrapped_image_obj.image_original.save(file_name,ContentFile(response.content), save=False)
-                        scrapped_image_count += 1
-
-                        scrapped_image_obj.save()
-
-
-
-
+                    fetch_image_and_save(scheme, domain,image_source, scrapping_url)
+                    scrapped_image_count += 1
 
             massage = f'Total {scrapped_image_count} images found'
 

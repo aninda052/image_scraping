@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'scraping',
     'rest_framework',
+    'background_task',
 ]
 
 MIDDLEWARE = [
@@ -137,3 +138,15 @@ MEDIA_URL = 'media/'
 # https://docs.djangoproject.com/en/4.0/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+
+TIME_ZONE = 'Asia/Dhaka'
+
+USE_I18N = True
+
+USE_L10N = False
+
+USE_TZ = False
+
+
+BACKGROUND_TASK_RUN_ASYNC=True
