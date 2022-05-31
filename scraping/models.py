@@ -1,9 +1,28 @@
 from django.db import models
+from PIL import Image
 
-# Create your models here.
+
+SMALL_IMAGE_WIDTH = 256
+MEDIUM_IMAGE_WIDTH = 1024
+LARGE_IMAGE_WIDTH = 2048
 
 
-class ScrapedImage(models.Model):
+
+class ResizeImageMixin:
+    def resize(self, imageField: models.ImageField, size:tuple, size_title='large'):
+        source_image = Image.open(imageField.path)  # Catch original
+        source_image = source_image.convert('RGB')
+        source_image.thumbnail(size)  # Resize to size
+
+        original_file_name = imageField.path.split('/')[-1]
+        new_file_name = f'{original_file_name.split(".")[0]}_{size_title}.{original_file_name.split(".")[1]}'
+        new_file_path = imageField.path.replace(original_file_name, new_file_name)
+        source_image.save(new_file_path)
+
+
+        return new_file_path
+
+class ScrapedImage(models.Model, ResizeImageMixin):
     def image_path(self, filename):
         return f"images/{self.domain}/{filename}"
 
@@ -19,6 +38,21 @@ class ScrapedImage(models.Model):
 
     def __str__(self):
         return self.image_source
+
+    def save(self, *args, **kwargs):
+
+        if self.image_original:
+
+            if self.image_original.width > SMALL_IMAGE_WIDTH:
+                self.image_small = self.resize(self.image_original, (SMALL_IMAGE_WIDTH, SMALL_IMAGE_WIDTH), "small")
+            if self.image_original.width > MEDIUM_IMAGE_WIDTH:
+                self.image_medium = self.resize(self.image_original, (MEDIUM_IMAGE_WIDTH, MEDIUM_IMAGE_WIDTH), "medium")
+            if self.image_original.width > LARGE_IMAGE_WIDTH:
+                self.image_large = self.resize(self.image_original, (LARGE_IMAGE_WIDTH, LARGE_IMAGE_WIDTH), "large")
+
+            self.image_dimension = f'{self.image_original.width}*{self.image_original.height}'
+
+        super(ScrapedImage, self).save(*args, **kwargs)
 
 
 

@@ -32,10 +32,17 @@ class LandingPageView(View):
                 image_source = ""
                 if 'src' in item.attrs:
                     image_source = item['src']
-                if image_source:
-                    if domain not in image_source:
-                        image_source = f'{scheme}://{domain}{image_source}'
-                        file_name = image_source.split('/')[-1]
+
+                if not image_source or 'svg' in image_source.split('.')[-1]:
+                    continue
+
+                if domain not in image_source:
+                    image_source = f'{scheme}://{domain}{image_source}'
+
+                file_name = image_source.split('/')[-1]
+
+                if not ScrapedImage.objects.filter(image_source=image_source).exists():
+
 
                     response = requests.get(image_source)
                     if response.status_code == 200:
@@ -43,11 +50,12 @@ class LandingPageView(View):
                         scrapped_image_obj.image_source = image_source
                         scrapped_image_obj.scraped_url = scrapping_url
                         scrapped_image_obj.domain = domain
-                        try:
-                            scrapped_image_obj.image_original.save(file_name,ContentFile(response.content))
-                            scrapped_image_count += 1
-                        except IntegrityError: # image_source already exist in db
-                            pass
+
+                        scrapped_image_obj.image_original.save(file_name,ContentFile(response.content), save=False)
+                        scrapped_image_count += 1
+
+                        scrapped_image_obj.save()
+
 
 
 
