@@ -6,7 +6,7 @@ from urllib.parse import urlparse
 from django.core.files.base import ContentFile
 from django.db import IntegrityError
 
-from scraping.models import ScrappedImage
+from scraping.models import ScrapedImage
 
 
 class LandingPageView(View):
@@ -39,7 +39,7 @@ class LandingPageView(View):
 
                     response = requests.get(image_source)
                     if response.status_code == 200:
-                        scrapped_image_obj = ScrappedImage()
+                        scrapped_image_obj = ScrapedImage()
                         scrapped_image_obj.image_source = image_source
                         scrapped_image_obj.scraped_url = scrapping_url
                         scrapped_image_obj.domain = domain

@@ -2,7 +2,7 @@ from django.db import models
 
 # Create your models here.
 
-class ScrappedImage(models.Model):
+class ScrapedImage(models.Model):
     def image_path(self, filename):
         return f"images/{self.domain}/{filename}"
 
@@ -14,7 +14,7 @@ class ScrappedImage(models.Model):
     image_dimension = models.CharField(max_length=10)
 
     def __str__(self):
-        return self.image_url
+        return self.image_source
 
 
 
