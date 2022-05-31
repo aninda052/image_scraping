@@ -44,7 +44,7 @@ class LandingPageView(View):
                         scrapped_image_obj.scraped_url = scrapping_url
                         scrapped_image_obj.domain = domain
                         try:
-                            scrapped_image_obj.image.save(file_name,ContentFile(response.content))
+                            scrapped_image_obj.image_original.save(file_name,ContentFile(response.content))
                             scrapped_image_count += 1
                         except IntegrityError: # image_source already exist in db
                             pass

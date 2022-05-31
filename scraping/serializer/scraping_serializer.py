@@ -7,10 +7,13 @@ class ImageListSerializer(serializers.ModelSerializer):
         model = ScrapedImage
         fields = [
             "image_id",
-            "image",
             "image_source",
             "scraped_url",
             "domain",
             "image_dimension",
             "download_date",
         ]
+    def to_representation(self, instance):
+        data = super().to_representation(instance)
+        data["image"] = instance.image_original.url
+        return data
