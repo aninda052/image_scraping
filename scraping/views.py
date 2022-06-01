@@ -25,10 +25,10 @@ class LandingPageView(View):
             soup = BeautifulSoup(htmldata, 'html.parser')
 
 
-            image_source_list = [item['src'] for item in soup.find_all('img')
-                                 if 'src' in item.attrs and item['src']  and 'svg' not in item['src'].split('.')[-1]]
+            image_source_list = list(set(item['src'] for item in soup.find_all('img')
+                                 if 'src' in item.attrs and item['src']  and 'svg' not in item['src'].split('.')[-1]))
 
-            fetch_image_and_save(image_source_list, scheme, domain, scrapping_url)
+            fetch_image_and_save.now(image_source_list, scheme, domain, scrapping_url)
 
             massage = f'Total {len(image_source_list)} images source found'
 
