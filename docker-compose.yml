@@ -1,0 +1,12 @@
+version: "3"
+
+services:
+
+  image_scraping:
+    build: .
+    volumes:
+      - .:/image_scraping
+    container_name: image_scraping
+    ports:
+      - 8000:8000
+

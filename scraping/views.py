@@ -30,7 +30,7 @@ class LandingPageView(View):
 
             fetch_image_and_save(image_source_list, scheme, domain, scrapping_url)
 
-            massage = f'Total {len(image_source_list)} images found'
+            massage = f'Total {len(image_source_list)} images source found'
 
         context = {"massage" : massage}
         return render(request, 'landing.html', context=context)

@@ -26,7 +26,7 @@ class ImageListAPI(generics.ListAPIView):
             filter["scraped_url"] = scraped_url
 
 
-        queryset = self.queryset.filter(**filter)
+        queryset = self.queryset.filter(**filter).order_by('download_date')
 
         return queryset
 
