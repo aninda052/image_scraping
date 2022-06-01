@@ -1,4 +1,3 @@
-import os
 
 from background_task import background
 import requests
@@ -7,7 +6,7 @@ from multiprocessing import Pool, cpu_count
 from .models import ScrapedImage
 import validators
 
-@background(schedule=5)
+@background()
 def fetch_image_and_save(image_source_list, scheme, domain, scrapping_url):
 
     fetch_image_function_arg_list = []
@@ -20,7 +19,7 @@ def fetch_image_and_save(image_source_list, scheme, domain, scrapping_url):
             file_name = f"{image_source.split('/')[-1].split('.')[0]}.jpeg"
 
             fetch_image_function_arg_list.append([image_source, scrapping_url, domain, file_name])
-            fetch_image(image_source, scrapping_url, domain, file_name)
+
 
     pool = Pool(processes=cpu_count()-1)
     pool.map(fetch_image_wrapper, fetch_image_function_arg_list)
@@ -31,7 +30,6 @@ def fetch_image_wrapper(args):
     fetch_image(*args)
 
 def fetch_image(image_source, scrapping_url, domain, file_name):
-    # print(os.getpid(), image_source)
 
     if validators.url(image_source):
         response =  requests.get(image_source)
