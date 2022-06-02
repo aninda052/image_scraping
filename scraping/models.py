@@ -36,6 +36,12 @@ class ScrapedImage(models.Model, ResizeImageMixin):
     download_date = models.DateField(auto_now_add=True)
     original_image_dimension = models.CharField(max_length=10)
 
+    class Meta:
+        indexes = [
+            models.Index(fields=['scraped_url']),
+            models.Index(fields=['domain']),
+        ]
+
     def __str__(self):
         return self.image_source
 
