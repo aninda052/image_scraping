@@ -20,7 +20,7 @@ class ImageListAPI(generics.ListAPIView):
             filter["id"] = image_id
 
         if image_source:
-            filter["image_source"] = image_source
+            filter["image_source__iexact"] = image_source
 
         if scraped_url:
             filter["scraped_url"] = scraped_url
