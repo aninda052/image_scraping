@@ -13,6 +13,7 @@ class ImageListAPI(generics.ListAPIView):
         image_id = int(self.request.query_params.get("image_id", 0))
         image_source = self.request.query_params.get("image_source", "")
         scraped_url = self.request.query_params.get("scraped_url", "")
+        domain = self.request.query_params.get("domain", "")
 
         filter  = {}
 
@@ -23,7 +24,10 @@ class ImageListAPI(generics.ListAPIView):
             filter["image_source__iexact"] = image_source
 
         if scraped_url:
-            filter["scraped_url"] = scraped_url
+            filter["scraped_url__iexact"] = scraped_url
+
+        if domain:
+            filter["domain__icontains"] = domain
 
 
         queryset = self.queryset.filter(**filter).order_by('download_date')

@@ -58,6 +58,7 @@ Available params -
 - `image_id`
 - `image_source`
 - `scraped_url`
+- `domain`
 
 
 
