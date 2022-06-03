@@ -14,6 +14,10 @@ class ResizeImageMixin:
         source_image = source_image.convert('RGB')
         source_image.thumbnail(size)  # Resize to size
 
+        # Resize to desire size
+        source_image.thumbnail(size, resample=Image.ANTIALIAS)
+
+        # extracting original file name
         original_file_name = imageField.path.split('/')[-1]
 
         # create new file name with concating original file name and  desire size
@@ -28,7 +32,9 @@ class ResizeImageMixin:
 
         # making new image file path
         new_file_path = imageField.path.replace(original_file_name, new_file_name)
-        source_image.save(new_file_path)
+
+        # storing new image file
+        source_image.save(new_file_path, quality=100)
 
 
         return new_file_path
