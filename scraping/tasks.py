@@ -50,7 +50,7 @@ def fetch_image(image_source, scrapping_url, domain, file_name):
     if validators.url(image_source):
         response =  requests.get(image_source)
 
-        # checking if the image  pulling successful or not
+        # checking if the image  pulling is successful or not
         if response.status_code == 200:
             scrapped_image_obj = ScrapedImage()
             scrapped_image_obj.image_source = image_source
