@@ -16,7 +16,10 @@ def fetch_image_and_save(image_source_list, scheme, domain, scrapping_url):
         #     image_source = f'{scheme}://{domain}{image_source}'
 
         if not ScrapedImage.objects.filter(image_source=image_source).exists():
-            file_name = f"{image_source.split('/')[-1].split('.')[0]}.jpeg"
+            '''if not exist, we'll try to fetch this image '''
+
+            # extracting file name for this image by splitting image source
+            file_name = f"{image_source.split('/')[-1]}"
 
             fetch_image_function_arg_list.append([image_source, scrapping_url, domain, file_name])
 

@@ -15,7 +15,18 @@ class ResizeImageMixin:
         source_image.thumbnail(size)  # Resize to size
 
         original_file_name = imageField.path.split('/')[-1]
-        new_file_name = f'{original_file_name.split(".")[0]}_{size_title}.{original_file_name.split(".")[1]}'
+
+        # create new file name with concating original file name and  desire size
+        tmp_original_file_name = original_file_name.split(".")
+
+        # create new file name without file extension
+        new_file_name = f'{tmp_original_file_name[0]}_{size_title}'
+
+        # if extension exist in original file, add extension in new file
+        if len(tmp_original_file_name)>1:
+            new_file_name = f'{new_file_name}.{tmp_original_file_name[1]}'
+
+        # making new image file path
         new_file_path = imageField.path.replace(original_file_name, new_file_name)
         source_image.save(new_file_path)
 
