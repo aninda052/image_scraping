@@ -40,9 +40,19 @@ class ImageListAPI(generics.ListAPIView):
 
         image_id = int(self.request.query_params.get("image_id", 0))
         image_source = self.request.query_params.get("image_source", "")
+        image_size = self.request.query_params.get("image_size", "")
 
         if image_id and image_source:
             return Response({"massage": "You can either use image_id or image_source"}, status=status.HTTP_409_CONFLICT)
+        if image_size and image_size not in ["small", "medium", "large"]:
+            return Response({
+                "massage": "Invalid value for filed image_size",
+                 "expected value": [
+                     "small", "medium", "large"
+                 ]
+                 },
+                status=status.HTTP_400_BAD_REQUEST
+            )
 
         if not self.get_queryset().count():
             return Response({"massage": "No image Found"}, status=status.HTTP_404_NOT_FOUND)
