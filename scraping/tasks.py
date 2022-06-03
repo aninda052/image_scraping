@@ -22,12 +22,9 @@ def fetch_image_and_save(image_source_list, scheme, domain, scrapping_url):
 
 
     pool = Pool(processes=cpu_count()-1)
-    pool.map(fetch_image_wrapper, fetch_image_function_arg_list)
+    pool.starmap(fetch_image, fetch_image_function_arg_list)
 
 
-
-def fetch_image_wrapper(args):
-    fetch_image(*args)
 
 def fetch_image(image_source, scrapping_url, domain, file_name):
 
