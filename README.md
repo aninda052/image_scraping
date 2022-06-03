@@ -53,15 +53,98 @@ This api only allow `GET` method.
 
 You can also filter/search images through this api by passing multiple query params.
 
-Available params - 
+### Available Request parameters
 
-- `image_id`
+- `image_id` : 
+  - Data type : Int
+  - Expected value : id of any Image
+- `image_size`
+  - Data type : String
+  - Expected value : `small`, `medium` & `large`
 - `image_source`
+  - Data type : String
+  - Expected value : original image source of any Image
 - `scraped_url`
+  - Data type : String
+  - Expected value : the url from where image has been scraped
 - `domain`
+  - Data type : String
+  - Expected value : domain name from where image has been scraped
 
+### The response body have 4 parameters
 
+- count : total number of image
+- next : next page link (`null` if there is no next page)
+- previous : previous page link (`null` if there is no previous page)
+- results : list of image objects
 
+## Request-Response Example
 
+Get image with id `5`
 
+#### Request Url
+
+`http://127.0.0.1:8000/api/get-image/?image_id=5`
+
+#### Response 
+
+```angular2html
+{
+    "count": 1,
+    "next": null,
+    "previous": null,
+    "results": [
+        {
+            "image_id": 5,
+            "image_source": "https://www.lg.com/lg5-common/images/common/header/logo-experience-happiness.png",
+            "scraped_url": "https://www.lg.com/us/refrigerators",
+            "domain": "www.lg.com",
+            "download_date": "2022-06-04",
+            "image": "http://127.0.0.1:8081/media/images/www.lg.com/logo-experience-happiness_fkmmKcQ.png",
+            "image_dimension": "100*30"
+        }
+    ]
+}
+
+```
+
+Get images with a domain `lg` and image size `small`
+
+#### Request Url
+
+`http://127.0.0.1:8000/api/get-image/?domain=lg&image_size=small`
+
+#### Response 
+
+```angular2html
+
+{
+    "count": 12,
+    "next": http://127.0.0.1:8000/api/get-image/?domain=lg&image_size=small&page=2,
+    "previous": null,
+    "results": [
+        {
+            "image_id": 1,
+            "image_source": "https://www.lg.com/lg5-common/images/common/header/logo-experience-happiness.png",
+            "scraped_url": "https://www.lg.com/us/refrigerators",
+            "domain": "www.lg.com",
+            "download_date": "2022-06-04",
+            "image": "http://127.0.0.1:8081/media/images/www.lg.com/logo-experience-happiness_fkmmKcQ.png",
+            "image_dimension": "100*30"
+        },
+        {
+            "image_id": 2,
+            "image_source": "https://www.lg.com/us/images/gnb/lg-thinkq-logo-2.png",
+            "scraped_url": "https://www.lg.com/us/refrigerators",
+            "domain": "www.lg.com",
+            "download_date": "2022-06-04",
+            "image": "http://127.0.0.1:8081/media/home/aninda/image_scraping/media/images/www.lg.com/lg-thinkq-logo-2_dt0PPDo_small.png",
+            "image_dimension": "256*50"
+        }
+        ...
+        
+    ]
+}
+
+```
 
