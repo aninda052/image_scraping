@@ -10,7 +10,7 @@ class ImageListAPI(generics.ListAPIView):
     serializer_class = ImageListSerializer
 
     def get_queryset(self):
-        image_id = int(self.request.query_params.get("image_id", 0))
+        image_id = self.request.query_params.get("image_id", 0)
         image_source = self.request.query_params.get("image_source", "")
         scraped_url = self.request.query_params.get("scraped_url", "")
         domain = self.request.query_params.get("domain", "")
@@ -38,9 +38,14 @@ class ImageListAPI(generics.ListAPIView):
 
     def get(self, request):
 
-        image_id = int(self.request.query_params.get("image_id", 0))
+        image_id = self.request.query_params.get("image_id", 0)
         image_source = self.request.query_params.get("image_source", "")
         image_size = self.request.query_params.get("image_size", "")
+
+        try:
+            image_id = int(image_id)
+        except:
+            return Response({"massage": "image_id should be integer "}, status=status.HTTP_400_BAD_REQUEST)
 
         if image_id and image_source:
             return Response({"massage": "You can either use image_id or image_source"}, status=status.HTTP_409_CONFLICT)
